@@ -1,34 +1,45 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useEffect } from 'react';
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const DivisionInput = ({setProbability}: {setProbability: React.Dispatch<React.SetStateAction<number>>}) => {
+  const [nominator, setNominator] = useState(0.0);
+  const [denominator, setDenominator] = useState(0.0);
+
+  useEffect(() => {
+    if (denominator !== 0 && !isNaN(nominator) && !isNaN(denominator)) {
+      setProbability(nominator / denominator);
+    } else {
+      setProbability(0);
+    }
+  }, [nominator, denominator, setProbability]);
+  
+  return (
+    <div>
+      <input 
+        type="number" 
+        value={nominator} 
+        onChange={e => setNominator(e.target.valueAsNumber)}
+      />
+      <p>/</p>
+      <input 
+        type="number"  
+        value={denominator}
+        onChange={e => setDenominator(e.target.valueAsNumber)}
+      />
+    </div>
+  )
+}
+
+const App = () => {
+  const [probability, setProbability] = useState(0.0);
+
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <DivisionInput setProbability={setProbability}/>
+      {probability != 0 ? probability : ''}
+    </div>
   )
 }
 
